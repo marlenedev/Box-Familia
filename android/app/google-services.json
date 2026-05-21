@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "836905993125",
+    "project_id": "box-familia",
+    "storage_bucket": "box-familia.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836905993125:android:db1e389b4999e1f1645e4c",
+        "android_client_info": {
+          "package_name": "com.example.box_familia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKxOlfZ_ALMGjRw2xAUeBYaaeYe-dw9oc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
