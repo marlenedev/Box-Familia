@@ -9,6 +9,8 @@ import 'screens/home_screen.dart';
 import 'services/local_storage_service.dart';
 import 'services/firestore_service.dart';
 
+import 'theme/app_theme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -38,10 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Family Inventory',
-      theme: ThemeData(
-        colorSchemeSeed: Colors.blue,
-        brightness: Brightness.light,
-      ),
+      theme: AppTheme.themeData,
       home: FutureBuilder(
         future: _getInitialScreen(),
         builder: (context, snapshot) {

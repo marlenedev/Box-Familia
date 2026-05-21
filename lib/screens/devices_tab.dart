@@ -33,8 +33,13 @@ class _DevicesTabState extends State<DevicesTab> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Nom'),
+                decoration: const InputDecoration(
+                  labelText: 'Nom',
+                  contentPadding: EdgeInsets.all(16),
+                ),
               ),
+
+              const SizedBox(height: 16),
 
               TextField(
                 controller: descriptionController,
@@ -95,7 +100,7 @@ class _DevicesTabState extends State<DevicesTab> {
                 controller: nameController,
                 decoration: const InputDecoration(labelText: 'Nom'),
               ),
-
+              const SizedBox(height: 16),
               TextField(
                 controller: descriptionController,
                 decoration: const InputDecoration(labelText: 'Description'),

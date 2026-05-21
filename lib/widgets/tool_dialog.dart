@@ -38,7 +38,7 @@ class ToolDialog extends StatelessWidget {
               labelText: 'Nom',
             ),
           ),
-
+          const SizedBox(height: 16),
           TextField(
             controller: descriptionController,
             decoration: const InputDecoration(

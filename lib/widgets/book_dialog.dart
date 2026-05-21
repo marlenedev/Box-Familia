@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BookDialog extends StatelessWidget {
-
   final TextEditingController nameController;
   final TextEditingController authorController;
 
@@ -27,31 +26,21 @@ class BookDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
-
       title: Text(title),
 
       content: SingleChildScrollView(
         child: Column(
-          mainAxisSize:
-              MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
-
             TextField(
               controller: nameController,
-              decoration:
-                  const InputDecoration(
-                labelText: 'Titre',
-              ),
+              decoration: const InputDecoration(labelText: 'Titre'),
             ),
-
+            const SizedBox(height: 16),
             TextField(
               controller: authorController,
-              decoration:
-                  const InputDecoration(
-                labelText: 'Auteur',
-              ),
+              decoration: const InputDecoration(labelText: 'Auteur'),
             ),
 
             const SizedBox(height: 16),
@@ -60,19 +49,11 @@ class BookDialog extends StatelessWidget {
               value: selectedType,
               isExpanded: true,
               items: const [
-
-                DropdownMenuItem(
-                  value: 'paper',
-                  child: Text(
-                    'Livre papier',
-                  ),
-                ),
+                DropdownMenuItem(value: 'paper', child: Text('Livre papier')),
 
                 DropdownMenuItem(
                   value: 'digital',
-                  child: Text(
-                    'Livre numérique',
-                  ),
+                  child: Text('Livre numérique'),
                 ),
               ],
               onChanged: onTypeChanged,
@@ -82,7 +63,6 @@ class BookDialog extends StatelessWidget {
       ),
 
       actions: [
-
         TextButton(
           onPressed: () {
             Navigator.pop(context);
@@ -90,10 +70,7 @@ class BookDialog extends StatelessWidget {
           child: const Text('Annuler'),
         ),
 
-        ElevatedButton(
-          onPressed: onConfirm,
-          child: Text(buttonText),
-        ),
+        ElevatedButton(onPressed: onConfirm, child: Text(buttonText)),
       ],
     );
   }
