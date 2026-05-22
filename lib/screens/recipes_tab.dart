@@ -4,6 +4,8 @@ import '../models/recipe.dart';
 import '../models/app_user.dart';
 
 import '../services/recipes_service.dart';
+import '../widgets/confirm_delete_dialog.dart';
+import '../utils/snackbar_helper.dart';
 
 class RecipesTab extends StatefulWidget {
   final AppUser user;
@@ -72,9 +74,19 @@ class _RecipesTabState extends State<RecipesTab> {
 
                 ElevatedButton(
                   onPressed: () async {
+                    final name = nameController.text.trim();
+
+                    if (name.isEmpty) {
+                      SnackbarHelper.showError(
+                        context,
+                        'Le nom est obligatoire',
+                      );
+
+                      return;
+                    }
                     final recipe = Recipe(
                       id: '',
-                      name: nameController.text,
+                      name: name,
                       type: selectedType,
                       ownerId: widget.user.id,
                       ownerName: widget.user.name,
@@ -151,9 +163,19 @@ class _RecipesTabState extends State<RecipesTab> {
 
                 ElevatedButton(
                   onPressed: () async {
+                    final name = nameController.text.trim();
+
+                    if (name.isEmpty) {
+                      SnackbarHelper.showError(
+                        context,
+                        'Le nom est obligatoire',
+                      );
+
+                      return;
+                    }
                     final updatedRecipe = Recipe(
                       id: recipe.id,
-                      name: nameController.text,
+                      name: name,
                       type: selectedType,
                       ownerId: recipe.ownerId,
                       ownerName: recipe.ownerName,
@@ -180,7 +202,7 @@ class _RecipesTabState extends State<RecipesTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Recettes')),
+      appBar: AppBar(title: const Text('Idées recettes')),
 
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddDialog,
@@ -269,8 +291,26 @@ class _RecipesTabState extends State<RecipesTab> {
 
                                   IconButton(
                                     icon: const Icon(Icons.delete),
-                                    onPressed: () async {
-                                      await _service.deleteRecipe(recipe.id);
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+
+                                        builder: (_) {
+                                          return ConfirmDeleteDialog(
+                                            title:
+                                                'Suppression idée : ${recipe.name}',
+
+                                            message:
+                                                'Voulez-vous supprimer cette idée recette ?',
+
+                                            onConfirm: () async {
+                                              await _service.deleteRecipe(
+                                                recipe.id,
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
                                     },
                                   ),
                                 ],

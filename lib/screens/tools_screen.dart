@@ -6,6 +6,8 @@ import '../models/app_user.dart';
 import '../services/tools_service.dart';
 import '../widgets/tool_card.dart';
 import '../widgets/tool_dialog.dart';
+import '../widgets/confirm_delete_dialog.dart';
+import '../utils/snackbar_helper.dart';
 
 class ToolsScreen extends StatefulWidget {
   final AppUser user;
@@ -26,17 +28,41 @@ class _ToolsScreenState extends State<ToolsScreen> {
 
     await showDialog(
       context: context,
+
       builder: (_) {
         return ToolDialog(
           title: 'Ajouter un outil',
+
           buttonText: 'Ajouter',
+
           nameController: nameController,
+
           descriptionController: descriptionController,
+
           onConfirm: () async {
+            final name = nameController.text.trim();
+
+            final description = descriptionController.text.trim();
+
+            if (name.isEmpty) {
+              SnackbarHelper.showError(context, 'Le nom est obligatoire');
+
+              return;
+            }
+
+            if (description.isEmpty) {
+              SnackbarHelper.showError(
+                context,
+                'La description est obligatoire',
+              );
+
+              return;
+            }
+
             final tool = Tool(
               id: '',
-              name: nameController.text,
-              description: descriptionController.text,
+              name: name,
+              description: description,
               ownerId: widget.user.id,
               ownerName: widget.user.name,
             );
@@ -44,6 +70,8 @@ class _ToolsScreenState extends State<ToolsScreen> {
             await _toolsService.addTool(tool);
 
             if (!mounted) return;
+
+            SnackbarHelper.showSuccess(context, 'Outil ajouté');
 
             Navigator.pop(context);
           },
@@ -59,24 +87,50 @@ class _ToolsScreenState extends State<ToolsScreen> {
 
     await showDialog(
       context: context,
+
       builder: (_) {
         return ToolDialog(
-          title: 'Ajouter un outil',
-          buttonText: 'Ajouter',
+          title: 'Modifier un outil',
+
+          buttonText: 'Modifier',
+
           nameController: nameController,
+
           descriptionController: descriptionController,
+
           onConfirm: () async {
-            final tool = Tool(
-              id: '',
-              name: nameController.text,
-              description: descriptionController.text,
-              ownerId: widget.user.id,
-              ownerName: widget.user.name,
+            final name = nameController.text.trim();
+
+            final description = descriptionController.text.trim();
+
+            if (name.isEmpty) {
+              SnackbarHelper.showError(context, 'Le nom est obligatoire');
+
+              return;
+            }
+
+            if (description.isEmpty) {
+              SnackbarHelper.showError(
+                context,
+                'La description est obligatoire',
+              );
+
+              return;
+            }
+
+            final updatedTool = Tool(
+              id: tool.id,
+              name: name,
+              description: description,
+              ownerId: tool.ownerId,
+              ownerName: tool.ownerName,
             );
 
-            await _toolsService.addTool(tool);
+            await _toolsService.updateTool(updatedTool);
 
             if (!mounted) return;
+
+            SnackbarHelper.showSuccess(context, 'Outil modifié');
 
             Navigator.pop(context);
           },
@@ -126,7 +180,21 @@ class _ToolsScreenState extends State<ToolsScreen> {
                 },
 
                 onDelete: () async {
-                  await _toolsService.deleteTool(tool.id);
+                  showDialog(
+                    context: context,
+
+                    builder: (_) {
+                      return ConfirmDeleteDialog(
+                        title: "Suppression de l'outil : ${tool.name}",
+
+                        message: 'Voulez-vous supprimer cet outil ?',
+
+                        onConfirm: () async {
+                          await _toolsService.deleteTool(tool.id);
+                        },
+                      );
+                    },
+                  );
                 },
               );
             },

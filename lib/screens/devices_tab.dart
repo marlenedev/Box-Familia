@@ -4,6 +4,8 @@ import '../models/device.dart';
 import '../models/app_user.dart';
 
 import '../services/devices_service.dart';
+import '../widgets/confirm_delete_dialog.dart';
+import '../utils/snackbar_helper.dart';
 
 class DevicesTab extends StatefulWidget {
   final AppUser user;
@@ -58,10 +60,29 @@ class _DevicesTabState extends State<DevicesTab> {
 
             ElevatedButton(
               onPressed: () async {
+                final name = nameController.text.trim();
+
+                final description = descriptionController.text.trim();
+
+                if (name.isEmpty) {
+                  SnackbarHelper.showError(context, 'Le nom est obligatoire');
+
+                  return;
+                }
+
+                if (description.isEmpty) {
+                  SnackbarHelper.showError(
+                    context,
+                    'La description est obligatoire',
+                  );
+
+                  return;
+                }
+
                 final device = Device(
                   id: '',
-                  name: nameController.text,
-                  description: descriptionController.text,
+                  name: name,
+                  description: description,
                   ownerId: widget.user.id,
                   ownerName: widget.user.name,
                 );
@@ -69,6 +90,8 @@ class _DevicesTabState extends State<DevicesTab> {
                 await _service.addDevice(device);
 
                 if (!mounted) return;
+
+                SnackbarHelper.showSuccess(context, 'Appareil ajouté');
 
                 Navigator.pop(context);
               },
@@ -118,10 +141,28 @@ class _DevicesTabState extends State<DevicesTab> {
 
             ElevatedButton(
               onPressed: () async {
+                final name = nameController.text.trim();
+
+                final description = descriptionController.text.trim();
+
+                if (name.isEmpty) {
+                  SnackbarHelper.showError(context, 'Le nom est obligatoire');
+
+                  return;
+                }
+
+                if (description.isEmpty) {
+                  SnackbarHelper.showError(
+                    context,
+                    'La description est obligatoire',
+                  );
+
+                  return;
+                }
                 final updatedDevice = Device(
                   id: device.id,
-                  name: nameController.text,
-                  description: descriptionController.text,
+                  name: name,
+                  description: description,
                   ownerId: device.ownerId,
                   ownerName: device.ownerName,
                 );
@@ -204,8 +245,23 @@ class _DevicesTabState extends State<DevicesTab> {
 
                             IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () async {
-                                await _service.deleteDevice(device.id);
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+
+                                  builder: (_) {
+                                    return ConfirmDeleteDialog(
+                                      title: 'Suppression de : ${device.name}',
+
+                                      message:
+                                          'Voulez-vous supprimer cet appareil ?',
+
+                                      onConfirm: () async {
+                                        await _service.deleteDevice(device.id);
+                                      },
+                                    );
+                                  },
+                                );
                               },
                             ),
                           ],
